@@ -1,0 +1,631 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+class Assessment
+{
+    public:
+        string type;
+        float mark;
+        Assessment *next;
+};
+
+class Student
+{
+    public:
+        string ID;
+        float cmark;
+        Assessment *head;
+};
+
+class List
+{
+    public:
+        int index;
+        Student record[100];
+};
+
+int x=-1,option=0;
+char alpha;
+float score;
+string newID;
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+void Quiz(List* NewNode)
+{
+    Assessment** last = &(NewNode->record[x].head);
+    Assessment* node = new Assessment();
+    
+    node->type = "Quiz";
+    node->next = NULL;
+    score = (score / 40) * 15;
+    node->mark = score;
+    cout << "Percentage of Quiz is " << fixed << setprecision(2) << score << "%" << endl << endl;
+
+    while(*last)
+    {
+        last = &(*last)->next;
+    }
+
+    *last = node;
+}
+
+
+void Assignment(List* NewNode)
+{
+    Assessment** last = &(NewNode->record[x].head);
+    Assessment* node = new Assessment();
+
+    node->type = "Assignment";
+    node->next = NULL;
+    score = (score / 10) * 10;
+    node->mark = score;
+    cout << "Percentage of Assignment is " << fixed << setprecision(2) << score << "%" << endl << endl;
+
+    while(*last)
+    {
+        last = &(*last)->next;
+    }
+
+    *last = node;
+}
+
+
+void Midterm(List* NewNode)
+{
+    Assessment** last = &(NewNode->record[x].head);
+    Assessment* node = new Assessment();
+
+    node->type = "Midterm";
+    node->next = NULL;
+    score = (score / 50) * 20;
+    node->mark = score;
+    cout << "Percentage of Mid Term Test is " << fixed << setprecision(2) << score << "%" << endl << endl;
+
+    while(*last)
+    {
+        last = &(*last)->next;
+    }
+
+    *last = node;
+}
+
+
+void Lab(List* NewNode)
+{
+    Assessment** last = &(NewNode->record[x].head);
+    Assessment* node = new Assessment();
+
+    node->type = "Lab";
+    node->next = NULL;
+    score = (score / 14) * 15;
+    node->mark = score;
+    cout << "Percentage of Lab Exercise is " << fixed << setprecision(2) << score << "%" << endl << endl;
+
+    while(*last)
+    {
+        last = &(*last)->next;
+    }
+
+    *last = node;
+}
+
+
+void addStudent(List** first)
+{
+    int q=0, a=0, m=0, l=0;
+    List* NewNode = new List();
+    NewNode->index = x;
+    NewNode->record[x].head = NULL;
+    
+    cout << "Enter Student ID: ";
+    cin >> NewNode->record[x].ID;
+    (*first) = NewNode;
+
+    do
+    {
+        cout << "\nAssessment Menu:  \n1. Quiz  \n2. Assignment  \n3. Mid Term Test  \n4. Lab Exercise" << endl;
+        cout << "Select Option: ";
+        cin >> option;
+
+        switch(option)
+        {
+            case 1:
+                if(q==0)
+                {
+                    cout << "Enter Quiz Mark (40): ";
+                    cin >> score;
+                    Quiz(NewNode);
+                    q++;
+                }
+                else
+                {
+                    cout << "Quiz mark already exists." << endl;
+                    cout << "Choose UPDATE option in MAIN MENU to update." << endl << endl;
+                }
+                break;
+            case 2:
+                if(a==0)
+                {
+                    cout << "Enter Assignment Mark (10): ";
+                    cin >> score;
+                    Assignment(NewNode);
+                    a++;
+                }
+                else
+                {
+                    cout << "Assignment mark already exists." << endl;
+                    cout << "Choose UPDATE option in MAIN MENU to update." << endl << endl;
+                }
+                break;
+            case 3:
+                if(m==0)
+                {
+                    cout << "Enter Mid Term Test Mark (50): ";
+                    cin >> score;
+                    Midterm(NewNode);
+                    m++;
+                }
+                else
+                {
+                    cout << "Mid Term Test mark already exists." << endl;
+                    cout << "Choose UPDATE option in MAIN MENU to update." << endl << endl;
+                }
+                break;
+            case 4:
+                if(l==0)
+                {
+                    cout << "Enter Lab Exercise Mark (14): ";
+                    cin >> score;
+                    Lab(NewNode);
+                    l++;
+                }
+                else
+                {
+                    cout << "Lab Exercise mark already exists." << endl;
+                    cout << "Choose UPDATE option in MAIN MENU to update." << endl << endl;
+                }
+                break;
+            default:
+                cout << "Invalid option, Try again!" << endl << endl;
+        }
+
+        cout << "Add another assessment [Y/N]: ";
+        cin >> alpha;
+    }while(alpha!='N' && alpha!='n');
+    cout << endl;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+void updateQuiz(List* temp, int i)
+{
+    Assessment** p1 = &(temp->record[i].head);
+    int b=0;
+
+    while(*p1)
+    {
+        if((*p1)->type == "Quiz")
+        {
+            cout << "Current Percentage of Quiz: " << fixed << setprecision(2) << (*p1)->mark << "%" << endl;
+            cout << "Enter new Quiz mark(40): ";
+            cin >> score;
+            score = (score / 40) * 15;
+            (*p1)->mark = score;
+            cout << "New Percentage of Quiz is " << fixed << setprecision(2) << score << "%" << endl << endl;
+            b++;
+            break;
+        }
+        else
+            p1 = &(*p1)->next;
+    }
+
+    if(b==0)
+    {
+        Assessment* node = new Assessment();
+
+        node->type = "Quiz";
+        node->next = NULL;
+        cout << "Current Percentage of Quiz: 0.00%" << endl;
+        cout << "Enter new Quiz mark(40): ";
+        cin >> score;
+        score = (score / 40) * 15;
+        node->mark = score;
+        cout << "New Percentage of Quiz is " << fixed << setprecision(2) << score << "%" << endl << endl;
+        *p1 = node;
+    }
+}
+
+
+void updateAssignment(List* temp, int i)
+{
+    Assessment** p1 = &(temp->record[i].head);
+    int b=0;
+
+    while(*p1)
+    {
+        if((*p1)->type == "Assignment")
+        {
+            cout << "Current Percentage of Assignment: " << fixed << setprecision(2) << (*p1)->mark << "%" << endl;
+            cout << "Enter new Assignment mark(10): ";
+            cin >> score;
+            score = (score / 10) * 10;
+            (*p1)->mark = score;
+            cout << "New Percentage of Assignment is " << fixed << setprecision(2) << score << "%" << endl << endl;
+            b++;
+            break;
+        }
+        else
+            p1 = &(*p1)->next;
+    }
+
+    if(b==0)
+    {
+        Assessment* node = new Assessment();
+        
+            node->type = "Assignment";
+            node->next = NULL;
+            cout << "Current Percentage of Assignment: 0.00%" << endl;
+            cout << "Enter new Assignment mark(10): ";
+            cin >> score;
+            score = (score / 10) * 10;
+            node->mark = score;
+            cout << "New Percentage of Assignment is " << fixed << setprecision(2) << score << "%" << endl << endl;
+            *p1 = node;
+    }
+}
+
+
+void updateMidterm(List* temp, int i)
+{
+    Assessment** p1 = &(temp->record[i].head);
+    int b=0;
+
+    while(*p1)
+    {
+        if((*p1)->type == "Midterm")
+        {
+            cout << "Current Percentage of Mid Term Test: " << fixed << setprecision(2) << (*p1)->mark << "%" << endl;
+            cout << "Enter new Mid Term Test mark(50): ";
+            cin >> score;
+            score = (score / 50) * 20;
+            (*p1)->mark = score;
+            cout << "New Percentage of Mid Term Test is " << fixed << setprecision(2) << score << "%" << endl << endl;
+            b++;
+            break;
+        }
+        else
+            p1 = &(*p1)->next;
+    }
+
+    if(b==0)
+    {
+        Assessment* node = new Assessment();
+        
+        node->type = "Midterm";
+        node->next = NULL;
+        cout << "Current Percentage of Mid Term Test: 0.00%" << endl;
+        cout << "Enter new Mid Term Test mark(50): ";
+        cin >> score;
+        score = (score / 50) * 20;
+        node->mark = score;
+        cout << "New Percentage of Mid Term Test is " << fixed << setprecision(2) << score << "%" << endl << endl;
+        *p1 = node;
+    }
+}
+
+
+void updateLab(List* temp, int i)
+{
+    Assessment** p1 = &(temp->record[i].head);
+    int b=0;
+
+    while(*p1)
+    {
+        if((*p1)->type == "Lab")
+        {
+            cout << "Current Percentage of Lab Exercise: " << fixed << setprecision(2) << (*p1)->mark << "%" << endl;
+            cout << "Enter new Lab Exercise mark(14): ";
+            cin >> score;
+            score = (score / 14) * 15;
+            (*p1)->mark = score;
+            cout << "New Percentage of Lab Exercise is " << fixed << setprecision(2) << score << "%" << endl << endl;
+            b++;
+            break;
+        }
+        else
+            p1 = &(*p1)->next;
+    }
+
+    if(b==0)
+    {
+        Assessment* node = new Assessment();
+        
+        node->type = "Lab";
+        node->next = NULL;
+        cout << "Current Percentage of Lab Exercise: 0.00%" << endl;
+        cout << "Enter new Lab Exercise mark(14): ";
+        cin >> score;
+        score = (score / 14) * 15;
+        node->mark = score;
+        cout << "New Percentage of Lab Exercise is " << fixed << setprecision(2) << score << "%" << endl << endl;
+        *p1 = node;
+    }
+}
+
+
+void Update(List** first)
+{
+    List* temp = *first;
+    int i;
+    cout << "Enter Student ID: ";
+    cin >> newID;
+    
+    for(int y=0;y<x;y++)
+    {
+        if(temp->record[y].ID == newID)
+        {
+            i = y;
+            break;
+        }
+    }
+
+    do
+    {
+        cout << "\nAssessment Menu:  \n1. Quiz  \n2. Assignment  \n3. Mid Term Test  \n4. Lab Exercise" << endl;
+        cout << "Select Option: ";
+        cin >> option;
+
+        switch(option)
+        {
+            case 1:
+                updateQuiz(temp, i);
+                break;
+            case 2:
+                updateAssignment(temp, i);
+                break;
+            case 3:
+                updateMidterm(temp, i);
+                break;
+            case 4:
+                updateLab(temp, i);
+                break;
+            default:
+                cout << "\nInvalid option, Try again!" << endl << endl;
+        }
+
+        cout  << "Update another assessment [Y/N]: ";
+        cin >> alpha;
+    }while(alpha!='N' && alpha!='n');
+    cout << endl;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+void Individual(List* temp, int i)
+{
+    Assessment** p = &(temp->record[i].head);
+    float total=0;
+
+    cout << "\n::Carry Mark Details::" << endl;
+    cout << "**********************" << endl;
+    cout << "Student ID : " << newID << endl;
+
+    while(*p)
+    {
+        if((*p)->mark > 0)
+            cout << (*p)->type << " : " << fixed << setprecision(2) << (*p)->mark << "%" << endl;
+        else
+            cout << (*p)->type << " : Not Available" << endl;
+
+        total += (*p)->mark;
+        p = &(*p)->next;
+    }
+    
+    temp->record[i].cmark = total;
+    cout << "Total Carry Mark : " << fixed << setprecision(2) << total << "%" << endl;
+    cout << "**********************" << endl;
+}
+
+
+void All(List* temp)
+{
+    Assessment** q;
+    float total=0;
+
+    for(int y=0;y<x;y++)
+    {
+        q = &(temp->record[y].head);
+
+        cout << "\n::Carry Mark Details::" << endl;
+        cout << "**********************" << endl;
+        cout << "Student ID : " << temp->record[y].ID << endl;
+
+        while(*q)
+        {
+            if((*q)->mark > 0)
+                cout << (*q)->type << " : " << fixed << setprecision(2) << (*q)->mark << "%" << endl;
+            else
+                cout << (*q)->type << " : Not Available" << endl;
+            total += (*q)->mark;
+            q = &(*q)->next;
+        }
+        
+        temp->record[y].cmark = total;
+        cout << "Total Carry Mark : " << fixed << setprecision(2) << total << "%" << endl;
+        cout << "**********************" << endl;
+    }
+}
+
+
+void Highest(List* temp)
+{
+    Assessment** m;
+    float max, total=0;
+    int i;
+
+    cout << "\n::Carry Mark Details::" << endl;
+    cout << "**********************" << endl;
+
+    for(int y=0;y<x;y++)    //Calculate total carry mark 
+    {
+        m = &(temp->record[y].head);
+
+        if(*m)
+        {
+            while(*m)
+            {
+                total += (*m)->mark;
+                m = &(*m)->next;
+            }
+            temp->record[y].cmark = total;
+        }
+        else
+            temp->record[y].cmark = 0;
+    }
+
+    for(int y=0;y<x;y++)    //Find highest carry mark
+    {
+        if( (temp->record[y].cmark) > (temp->record[y+1].cmark) )
+        {
+            max = (temp->record[y].cmark);
+            m = &(temp->record[y].head);
+            i = y;
+        }
+    }
+
+    cout << "Student ID: " << temp->record[i].ID << endl;
+
+    while(*m)
+    {
+        cout << fixed << setprecision(2) << (*m)->type << ": " << (*m)->mark << "%" << endl;
+        m = &(*m)->next;
+    }
+    cout << "Total Carry Mark: " << fixed << setprecision(2) << max << "%" << endl;
+    cout << "**********************" << endl;
+}
+
+
+void CarryMark(List** first)
+{
+    List* temp = *first;
+    int i;
+    cout << "\nDisplay Menu:  \n1. Individual  \n2. All  \n3. Highest Carry Mark" << endl;
+    cout << "Select Option: ";
+    cin >> option;
+
+    switch(option)
+    {
+        case 1:
+            cout << "\nEnter Student ID: ";
+            cin >> newID;
+            for(int y=0;y<x;y++)
+            {
+                if(temp->record[y].ID == newID)
+                {
+                    i = y;
+                    break;
+                }
+            }
+            Individual(temp, i);
+            break;
+        case 2:
+            All(temp);
+            break;
+        case 3:
+            Highest(temp);
+            break;
+    }
+    cout << "\nEnd of Summary" << endl << endl;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+void Summary(List* first)
+{
+    string fileName1, fileName2 = ".txt";
+    Assessment**h1;
+    float total=0;
+    int y;
+
+    cout << "Enter file name: ";
+	cin >> fileName1;
+
+	fileName1 = fileName1 + fileName2;
+    cout << "File " << fileName1 << " is saved." << endl << endl;
+
+    fstream file;
+    file.open(fileName1.c_str(), ios::app);
+
+	file << "STUDENT ID NO" << left << setw(5) << " " << "QUIZ" << left << setw(5) << " " << "ASSIGNMENT" << left << setw(5) << " " << "MD TEST" << left <<setw(5) << " " << "LAB EXE" << left << setw(5) << " " << "TOTAL CM" << endl;
+
+
+	for(y=0;y<x;y++)
+    {
+        h1 = &(first->record[y].head);
+
+        if(*h1)
+        {
+            file << setw(3) << first->record[y].ID;
+
+            while(*h1)
+            {
+                if((*h1)->mark > 0)
+                {
+                    file << fixed << left << setw(10) << " " << setprecision(2) << (*h1)->mark;
+                    total += (*h1)->mark;
+                }
+                else
+                    file << left << setw(10) << " " << "NA";
+
+                h1 = &(*h1)->next;
+            }
+            first->record[y].cmark = total;
+            file << fixed << left << setw(10) << " " << setprecision(2) << total << endl;
+        }
+        else
+            file << left << setw(10) << " " << "NA";
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+int main()
+{
+    List* first = NULL;
+
+    do
+    {
+        cout << "CARRY MARK PROGRAM  \n1. Add New Student  \n2. Update Assessment  \n3. Carry Mark Summary  \n4. Carry Mark Summary (Save to File)  \n5. Exit" << endl;
+        cout << "Select Menu: ";
+        cin >> option;
+
+        if(option==1)
+        {
+            x++;
+            addStudent(&first);
+            
+        }
+        else if(option==2)
+        {
+            Update(&first);
+        }
+        else if(option==3)
+        {
+            CarryMark(&first);
+        }
+        else if(option==4)
+        {
+            Summary(first);
+        }
+        else if(option>5)
+            cout << "Invalid option, Try again!!!" << endl << endl;
+    }while(option!=5);
+
+    cout << "\nThank You :)" << endl;
+
+    return 0;
+}
